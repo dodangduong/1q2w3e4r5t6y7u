@@ -9,4 +9,5 @@ pod 'SDWebImage'
 pod 'ObjectMapper', '~> 2.2'
 pod 'Alamofire'
 pod 'MEVFloatingButton'
+pod 'FacebookLogin'
 end

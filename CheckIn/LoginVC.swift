@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 class LoginVC: BaseViewController {
     
@@ -14,9 +16,10 @@ class LoginVC: BaseViewController {
     
     
     @IBAction func btnLoginFace(_ sender: Any) {
-        let listGVC = storyboard?.instantiateViewController(withIdentifier: "ListGroupVC") as! ListGroupVC
-        
-        present(listGVC, animated: true, completion: nil)
+//        let listGVC = storyboard?.instantiateViewController(withIdentifier: "ListGroupVC") as! ListGroupVC
+//        
+//        present(listGVC, animated: true, completion: nil)
+        getFacebookUserInfo()
     }
     
     
@@ -38,6 +41,24 @@ class LoginVC: BaseViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func getFacebookUserInfo(){
+        let loginManager : FBSDKLoginManager = FBSDKLoginManager()
+        loginManager.logIn(withReadPermissions: ["email","user_about_me","user_birthday"], from: self, handler: { (result , error) in
+            if (error == nil) {
+                let params = ["fields" : "id, name, first_name, last_name, picture.type(large)"]
+                let graphRequest = FBSDKGraphRequest.init(graphPath: "/me", parameters: params)
+                let Connection = FBSDKGraphRequestConnection()
+                Connection.add(graphRequest) { (Connection, result, error) in
+                    let info = result as! [String : AnyObject]
+                    print(info["name"] as! String)
+                }
+                Connection.start()
+            }
+        })
+    }
+    
+    
     
 
     /*
